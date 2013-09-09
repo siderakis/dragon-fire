@@ -60,7 +60,7 @@ object Template {
     <attribute name="engineid" type="int32">-1</attribute>
     <attribute name="display" type="bool">1</attribute>
     <attribute name="commandid" type="int32">{Random.nextInt(1E9.toInt)}</attribute>
-    <attribute name="appversion" type="int32">12</attribute>
+    <attribute name="appversion" type="int32">{app.v}</attribute>
     <attribute name="appbundle" type="string">{app.s}</attribute>
     <attribute name="active" type="bool">1</attribute>
     <relationship name="currentaction" type="1/1" destination="ACTION"></relationship>

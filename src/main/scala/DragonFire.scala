@@ -8,16 +8,29 @@ object DragonFire {
   implicit val author = Author("Nick")
 
   def main(args: Array[String]) {
-    saveCommands(idea, "idea-dragon.commandstext")
-
+    saveCommands(idea, "export/idea-dragon.commandstext")
+    saveCommands(terminal, "export/terminal-dragon.commandstext")
   }
 
+  private def terminal: Seq[Command] = {
+    implicit val app = AppName("com.googlecode.iterm2", 1)
+    Seq(
+      //These are commands for the terminal
+      "CD" >> "c d",
+      "LS" >> "l s",
+      "SBT" >> "s b t",
+      "Enter" >> "Return"
+    )
+  }
 
   private def idea: Seq[Command] = {
     //http://stackoverflow.com/questions/294167/what-are-the-most-useful-intellij-idea-keyboard-shortcuts
-    implicit val app = AppName("com.jetbrains.intellij")
+    implicit val app = AppName("com.jetbrains.intellij", 12)
+    def expander(word: String, action: String): Seq[Command] =
+      (1 to 19)
+        .map(i => s"$word ${words(i)} times" >> ((action + " ") * i).trim)
 
-    val simpleCommands: Seq[Command] = Seq(
+    Seq(
       "Duplicate Line" >> "Command-d",
       "Go To Line" >> "Command-g",
       //tabs
@@ -76,16 +89,12 @@ object DragonFire {
 
       "Show shortcuts" >> "Command-Shift-a",
 
-      "Camel" >!> "Terminal",
+      "Termie" >! "Terminal",
+
+      "Camel case" >** "camel",
+
       "Escape" >> "Escape"
-    )
-
-
-
-
-
-    val expandedCommands =
+    ) ++
       Seq("Up", "Down", "Left", "Right").flatMap(d => expander(d, d + "Arrow"))
-    simpleCommands ++ expandedCommands
   }
 }
