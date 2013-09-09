@@ -1,21 +1,29 @@
-import command.{Author, AppName, CommandGenerator}
-import java.awt.Robot
+import command.{Command, Author, AppName, CommandGenerator}
 import CommandGenerator._
+import scala.Predef._
 
 
-object Automater  {
+object DragonFire {
 
+  implicit val author = Author("Nick")
 
   def main(args: Array[String]) {
+    saveCommands(idea, "idea-dragon.commandstext")
 
-    implicit val app = AppName("com.jetbrains.intellij")
-    implicit val author = Author("Nick")
+  }
+
+
+  private def idea: Seq[Command] = {
     //http://stackoverflow.com/questions/294167/what-are-the-most-useful-intellij-idea-keyboard-shortcuts
+    implicit val app = AppName("com.jetbrains.intellij")
 
-    val commands = Seq(
-
+    val simpleCommands: Seq[Command] = Seq(
+      "Duplicate Line" >> "Command-d",
+      "Go To Line" >> "Command-g",
       //tabs
       "Close Tab" >> "Shift-Command-F4",
+      "Toggle Tab" >> "Control-Tab",
+
       //      "Tab" >> "Control-Tab",
       //      "P Tab" >> "Control",
 
@@ -27,6 +35,8 @@ object Automater  {
       "End" >> "Command-RightArrow",
 
       "Up" >> "UpArrow",
+
+
       "Down" >> "DownArrow",
 
       //selecting
@@ -38,9 +48,13 @@ object Automater  {
       //
       "Open Class" >> "Command-n",
       "Open File" >> "Shift-Command-n",
+      "New Class" >> "Control-n",
 
       "Implementation" >> "Option-Shift-b",
+      "File Structure" >> "Control-Tab-7", //Command-F12",
+      "Type Hierarchy" >> "Control-h",
 
+      //debugging
 
       //Navigation
       "Go to Declaration" >> "Command-b",
@@ -66,8 +80,12 @@ object Automater  {
       "Escape" >> "Escape"
     )
 
-    saveCommands(commands, "automator-dragon.commandstext")
 
+
+
+
+    val expandedCommands =
+      Seq("Up", "Down", "Left", "Right").flatMap(d => expander(d, d + "Arrow"))
+    simpleCommands ++ expandedCommands
   }
-
 }

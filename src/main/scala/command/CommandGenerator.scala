@@ -28,8 +28,17 @@ case class Author(val s: String) extends AnyVal
 
 object CommandGenerator {
 
-
   implicit def text2Command(word: String) = CommandGenerator(word)
+
+  val words = Seq(
+    "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"
+  )
+
+  def expander(word: String, action: String): Seq[Command] =
+    (1 to 19)
+      .map(i => s"$word ${words(i)} times" >> ((action + " ") * i).trim)
+
 
   def saveCommands(commands: Seq[Command], fileName: String) = {
     val data = commands.zipWithIndex.map {
